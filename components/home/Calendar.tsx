@@ -5,15 +5,15 @@ export default function Calendar(props:any) {
 
     /** 캘린더 스타일 클래스 */
     const calendarStyleMap = {
-        headDayStyle: "flex justify-center items-center h-[30px] text-xs border-t-[1px] border-r-[1px] border-[#b8b8b8]"
-        , dayStyle: "h-[45px] text-xs border-t-[1px] border-r-[1px] border-[#b8b8b8] relative"
+        headDayStyle: "flex justify-center items-center h-[30px] text-xs border-b-[1px] border-r-[1px] border-[#b8b8b8]"
+        , dayStyle: "h-[45px] text-xs border-b-[1px] border-r-[1px] border-[#b8b8b8] relative"
         , dateStyle: "w-[20px] flex justify-center items-center border-b-[1px] border-r-[1px] border-[#b8b8b8]"
         , dateAmtStyle: "w-full text-right absolute bottom-1 right-1"
     };
 
     return (
         <article
-          className="w-full grid grid-cols-7 border-b-[1px] border-[#b8b8b8]"
+          className="w-full grid grid-cols-7"
         >
           <div className={`${calendarStyleMap.headDayStyle} text-[#ffb4b4]`}>일</div>
           <div className={calendarStyleMap.headDayStyle}>월</div>
