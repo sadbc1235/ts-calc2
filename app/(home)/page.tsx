@@ -1,5 +1,6 @@
 'use client'
 
+import Loading from "@/components/common/Loading";
 import ReportContainer from "@/components/common/ReportContainer";
 import Calendar from "@/components/home/Calendar";
 import { fnGetCurrencyCode, fnGetDateNow, fnGetDayfirstDate, fnGetLastDate } from "@/script/constants";
@@ -8,6 +9,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const handle = {
     bindingCalendar: async (dateMonth:string) => {
+      setIsLoading(true);
       const prevDateMonth = dateMonth.split('-')[0] +'-'+ ((+dateMonth.split('-')[1]) - 1 == 0 ? '12' : (+dateMonth.split('-')[1]) - 1 < 10 ? '0'+((+dateMonth.split('-')[1]) - 1) : (+dateMonth.split('-')[1]) - 1);
       const prevLastDate = fnGetLastDate(prevDateMonth);
       const currLastDate = fnGetLastDate(dateMonth);
@@ -37,6 +39,7 @@ export default function Home() {
 
       setDateList(dateMap);
       setTotalAmt(totalAmt+'');
+      setIsLoading(false);
     }
   }
 
@@ -60,6 +63,7 @@ export default function Home() {
     }
   }
 
+  const [isLoading, setIsLoading] = useState(false);
   const [dateList, setDateList] = useState<any>([]);
   const [totalAmt, setTotalAmt] = useState('0');
 
@@ -90,6 +94,7 @@ export default function Home() {
           </tbody>
         </table>
       </article>
+      {isLoading && <Loading/>}
     </ReportContainer>
   );
 }

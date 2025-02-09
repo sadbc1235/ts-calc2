@@ -37,7 +37,7 @@ export function fnGetLastDate(date:string) {
 
 export function fnGetCurrencyCode(value:string) {
     if (!value) {
-        return '';
+        return '0';
     } else {
         return ('' + value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }

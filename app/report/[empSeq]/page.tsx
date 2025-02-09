@@ -68,10 +68,10 @@ export default function ReportEmp({params, searchParams}:any) {
                 <div className="text-right pt-1 pb-1 pr-2">{fnGetCurrencyCode(totalAmt)} &#8361;</div>
             </div>
             {amtList.map((item:any) => (
-            <div className="w-full text-sm border-[1px] border-[#b8b8b8] grid grid-cols-2" key={item.resSeq}>
+            <Link href={`/res/${item.resSeq}`} className="w-full text-sm border-[1px] border-[#b8b8b8] grid grid-cols-2" key={item.resSeq}>
                 <div className="w-[100px] text-center pt-1 pb-1 border-r-[1px] border-[#b8b8b8]">{item.spendDate}</div>
                 <div className="text-right pt-1 pb-1 pr-2">{fnGetCurrencyCode(item.amt)} &#8361;</div>
-            </div>
+            </Link>
             ))}
         </article>
     </section>

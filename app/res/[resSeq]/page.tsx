@@ -1,13 +1,54 @@
 'use client'
 
-import { fnGetDateNow } from "@/script/constants";
+import Loading from "@/components/common/Loading";
+import { fnGetCurrencyCode } from "@/script/constants";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-export default function Add() {
+export default function Res({params, searchParams}:any) {
+
     const tableStyle = {
         headTd: 'text-sm pr-2 pt-1 pb-1 bg-[#efefef]'
         , td: 'text-sm pl-2'
     }
+
+    const api = {
+        selectResInfo: async () => {
+            setIsLoading(true);
+            const res = await fetch(
+                '/api/selectResInfo', 
+                {
+                    method: 'POST'
+                    , headers: { 'Content-Type': 'application/json' }
+                    , body: JSON.stringify({resSeq: params.resSeq})
+                }
+            );
+            const result = await res.json();
+            setResInfo(result[0]);
+            setIsLoading(false);
+        }
+    }
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [resInfo, setResInfo] = useState<ResInfo>({
+        empName: '',
+        spendDate: '',
+        empSeq: '',
+        imgName: '',
+        amt: ''
+    });
+
+    interface ResInfo {
+        empName: string;
+        spendDate: string;
+        empSeq: string;
+        imgName: string;
+        amt: string;
+    }
+
+    useEffect(() => {
+        api.selectResInfo();
+    }, []);
 
   return (
     <section
@@ -25,16 +66,13 @@ export default function Add() {
                     <tr>
                         <td className={tableStyle.headTd+' text-right'}>사용자</td>
                         <td className={tableStyle.td}>
-                            <select>
-                                <option value=''>선택</option>
-                                <option value=''>김은수</option>
-                            </select>
+                            {resInfo.empName}
                         </td>
                     </tr>
                     <tr>
                         <td className={tableStyle.headTd+' text-right'}>날짜</td>
                         <td className={tableStyle.td}>
-                            <input type="date" value={fnGetDateNow('-')} onChange={(e) => {}}/>
+                            {resInfo.spendDate}
                         </td>
                     </tr>
                 </tbody>
@@ -52,17 +90,11 @@ export default function Add() {
                         <td className={tableStyle.headTd+' text-center'}>영수증</td>
                     </tr>
                     <tr>
-                        <td className={tableStyle.td+' h-[400px] flex items-center justify-center'}>
-                            <div 
-                                className="w-[45px] h-[45px] flex items-center justify-center p-2"
-                                style={{border: '2px dashed #888'}}
+                        <td className={tableStyle.td+' h-[400px] flex items-center justify-center relative'}>
+                            <div
+                                className={"w-full h-full p-2"}
                             >
-                                <svg 
-                                    viewBox="0 0 448 512"
-                                    className="fill-[#888]"
-                                >
-                                    <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
-                                </svg>
+                                <img className="w-full h-full object-contain" src={`/api/attachments/${resInfo.empSeq}/${resInfo.imgName}`} />
                             </div>
                         </td>
                     </tr>
@@ -84,10 +116,7 @@ export default function Add() {
                     <tr>
                         <td className={tableStyle.headTd+' text-center'}>영수증</td>
                         <td className={tableStyle.td}>
-                            <select>
-                                <option value=''>선택</option>
-                                <option value=''>100,00000</option>
-                            </select>
+                            <div>{fnGetCurrencyCode(resInfo.amt)}</div>
                         </td>
                     </tr>
                 </tbody>
@@ -95,30 +124,15 @@ export default function Add() {
         </article>
 
         <article
-            className="mt-4 grid grid-cols-2 gap-2 pl-1 pr-1"
+            className="mt-4 grid grid-cols-1 pl-1 pr-1"
         >
             <div
                 className="text-sm p-1 border-[1px] border-[#b8b8b8] text-center"
             >
-                <Link href='/'>취소</Link>
+                <Link href={`/report/${resInfo.empSeq}?empName=${resInfo.empName}&dateMonth=${resInfo.spendDate.substring(0, 7)}`}>BACK</Link>
             </div>
-
-            <input 
-                type="button"
-                value="저장"
-                className="text-sm p-1 border-[1px] border-[#b8b8b8]"
-            />
         </article>
-
-        <article
-            className="mt-4 grid grid-cols-1 pl-1 pr-1 hidden"
-        >
-            <input 
-                type="button"
-                value="BACK"
-                className="text-sm p-1 border-[1px] border-[#b8b8b8]"
-            />
-        </article>
+        {isLoading && <Loading/>}
     </section>
   );
 }

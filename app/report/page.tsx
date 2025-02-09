@@ -46,7 +46,7 @@ export default function Report() {
           <div className="text-right pt-1 pb-1 pr-2">{fnGetCurrencyCode(totalAmt)} &#8361;</div>
         </div>
         {empAmtList.map((item:any) => (
-        <Link href={`/report/${item.empSeq}?empName=${item.empName}&dateMonth=${dateMonth}`} key={item.empSeq}>
+        <Link href={`/report`+(!!item.totalAmt ? `/${item.empSeq}?empName=${item.empName}&dateMonth=${dateMonth}` : '')} key={item.empSeq}>
           <div className="w-full text-sm border-[1px] border-[#b8b8b8] grid grid-cols-2">
             <div className="w-[75px] text-center pt-1 pb-1 border-r-[1px] border-[#b8b8b8]">{item.empName}</div>
             <div className="text-right pt-1 pb-1 pr-2">{fnGetCurrencyCode(item.totalAmt)} &#8361;</div>
